@@ -2,10 +2,7 @@
 
 module Main where
 
-import           Data.List
 import qualified Data.Map as Map
-import           Data.Map (Map)
-import           Data.Monoid
 import           Foreign
 import           Foreign.C.Types
 import           Graphics.X11.ExtraTypes.XF86
@@ -15,9 +12,8 @@ import           XMonad
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Layout.NoBorders
-import           XMonad.Layout.PerWorkspace
 import           XMonad.Layout.SimplestFloat
-import           XMonad.Layout.Spacing
+-- import           XMonad.Layout.Spacing
 import qualified XMonad.StackSet as W
 import           XMonad.Util.Run (spawnPipe)
 
@@ -96,7 +92,7 @@ myFocusedBorderColour = cBlue
 myBorderWidth         = 3
 myFocusFollowsMouse   = True
 
-myWorkspaces = fmap show [1..9]
+myWorkspaces = fmap show [1..9 :: Int]
 
 -- | Move the mouse pointer to the centre of the window.
 mouseToWindowCentre :: Window -> X ()
