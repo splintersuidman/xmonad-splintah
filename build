@@ -10,4 +10,4 @@ cd "$dir"
 cd -
 
 cp "$dir"/"$result"/bin/"$bin" "$dist"
-chmod a+w $1
+chmod a+w "$dist"
