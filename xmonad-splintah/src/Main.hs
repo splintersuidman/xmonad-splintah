@@ -95,9 +95,8 @@ myFocusFollowsMouse   = True
 myWorkspaces = fmap show [1..9 :: Int]
 
 -- | Move the mouse pointer to the centre of the window.
-mouseToWindowCentre :: Window -> X ()
-mouseToWindowCentre window = do
-  XConf {display} <- ask
+mouseToWindowCentre :: Display -> Window -> X ()
+mouseToWindowCentre display window = do
   WindowAttributes {wa_width = width, wa_height = height} <-
     liftIO $ getWindowAttributes display window
   -- 'warpPointer' moves the mouse pointer relative to the origin of the
@@ -110,7 +109,10 @@ mouseToWindowCentre window = do
 
 -- | Move the mouse pointer to the centre of the focused window.
 mouseFollowsFocus :: X ()
-mouseFollowsFocus = withFocused mouseToWindowCentre
+mouseFollowsFocus =
+  withFocused $ \window ->
+  withDisplay $ \display ->
+  mouseToWindowCentre display window
 
 -- | Removes the 'CInt' constructor.
 unCInt (CInt i) = i
