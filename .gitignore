@@ -1,0 +1,6 @@
+**/dist*
+**/result*
+**/.stack-work*
+**/.ghc.environment.*
+xmonad-x86_64-linux
+xmonad.errors

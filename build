@@ -1,0 +1,13 @@
+#!/bin/sh
+
+dist=$1
+dir=xmonad-splintah
+result=result
+bin=xmonad-splintah
+
+cd "$dir"
+  nix-build -o "$result"
+cd -
+
+cp "$dir"/"$result"/bin/"$bin" "$dist"
+chmod a+w $1
