@@ -11,6 +11,7 @@ import           System.IO
 import           XMonad
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.ManageDocks
+import           XMonad.Hooks.SetWMName
 import           XMonad.Layout.NoBorders
 import           XMonad.Layout.SimplestFloat
 -- import           XMonad.Layout.Spacing
