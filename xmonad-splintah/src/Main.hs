@@ -123,6 +123,8 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   ---- Applications
   -- Launch terminal
   [ ((modm, xK_Return), spawn myTerminal)
+  -- Launch Emacs.
+  , ((modm, xK_e), spawn "emacs")
   -- Run dmenu
   , ((modm, xK_space), spawn $ "dmenu_run " <> dmenuOptions)
   -- Run passmenu
