@@ -1,8 +1,10 @@
-{-# LANGUAGE NamedFieldPuns, LambdaCase, TupleSections #-}
+{-# LANGUAGE LambdaCase     #-}
+{-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE TupleSections  #-}
 
 module Main where
 
-import qualified Data.Map as Map
+import qualified Data.Map                     as Map
 import           Foreign
 import           Foreign.C.Types
 import           Graphics.X11.ExtraTypes.XF86
@@ -16,8 +18,8 @@ import           XMonad.Hooks.SetWMName
 import           XMonad.Layout.NoBorders
 import           XMonad.Layout.SimplestFloat
 -- import           XMonad.Layout.Spacing
-import qualified XMonad.StackSet as W
-import           XMonad.Util.Run (spawnPipe)
+import qualified XMonad.StackSet              as W
+import           XMonad.Util.Run              (spawnPipe)
 
 data Colours = Colours
   { black        :: String
