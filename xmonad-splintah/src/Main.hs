@@ -83,7 +83,7 @@ dmenuOptions = unwords
   , "-sf", wrap "'" "'" cBrightWhite
   ]
 
-myTerminal            = "st screen"
+myTerminal            = "urxvt -e screen"
 myMusicPlayer         = "ncmpcpp"
 myFileBrowser         = "ranger"
 myModMask             = mod4Mask -- Windows key
