@@ -126,7 +126,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   -- Run dmenu
   , ((modm, xK_space), spawn $ "dmenu_run " <> dmenuOptions)
   -- Run passmenu
-  , ((modm, xK_p), spawn "~/scripts/passmenu")
+  , ((modm, xK_p), spawn $ "~/scripts/passmenu " <> dmenuOptions)
   -- Run file browser
   , ((modm, xK_f), spawn $ myTerminal <> " " <> myFileBrowser)
   -- Run music player
