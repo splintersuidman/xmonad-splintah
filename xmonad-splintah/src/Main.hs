@@ -230,7 +230,7 @@ myLogHook xmobarProc = dynamicLogWithPP xmobarPP
   , ppWsSep   = ""
   }
 
-myStartupHook = pure ()
+myStartupHook = setWMName "LG3D"
 
 main = do
   xmobarProc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc"
