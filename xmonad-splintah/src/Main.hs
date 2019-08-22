@@ -9,6 +9,7 @@ import           Graphics.X11.ExtraTypes.XF86
 import           Graphics.X11.Xlib.Misc
 import           System.IO
 import           XMonad
+import           XMonad.Actions.CopyWindow
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.SetWMName
