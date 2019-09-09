@@ -21,6 +21,6 @@ executable xmonad-splintah
                      , xmonad ^>=0.15
                      , xmonad-contrib ^>=0.15
                      , X11 ^>=1.9
-                     , containers ^>=0.6.0.0
+                     , containers ^>=0.6
   hs-source-dirs:      src
   default-language:    Haskell2010

@@ -138,6 +138,9 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   -- Run mpv with clipboard contents
   , ((modm, xK_v), spawn "~/scripts/mpvclip")
 
+  -- Switch keyboard layout.
+  , ((modm, xK_slash), spawn "~/scripts/switch-keyboard.sh")
+
   ---- xmonad
   -- Kill focused window
   , ((modm .|. shiftMask, xK_c), kill)
