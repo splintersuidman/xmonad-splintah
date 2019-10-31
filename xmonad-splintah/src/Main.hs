@@ -9,6 +9,7 @@ import           Foreign
 import           Foreign.C.Types
 import           Graphics.X11.ExtraTypes.XF86
 import           Graphics.X11.Xlib.Misc
+import qualified Polybar
 import           System.IO
 import           XMonad
 import           XMonad.Actions.CopyWindow
@@ -19,7 +20,6 @@ import           XMonad.Layout.NoBorders
 import           XMonad.Layout.SimplestFloat
 -- import           XMonad.Layout.Spacing
 import qualified XMonad.StackSet              as W
-import           XMonad.Util.Run              (spawnPipe)
 
 data Colours = Colours
   { black        :: String
@@ -58,6 +58,7 @@ gruvbox = Colours
   , brightCyan   = "#8ec07c"
   , brightWhite  = "#ebdbb2"
   }
+import           XMonad.Util.Run              (safeSpawn, spawnPipe)
 
 colours = gruvbox
 
@@ -232,7 +233,7 @@ myManageHook = manageDocks <+> composeAll
 
 myHandleEventHook = docksEventHook
 
-myLogHook xmobarProc = dynamicLogWithPP xmobarPP
+xmobarLogHook xmobarProc = dynamicLogWithPP xmobarPP
   { ppOutput  = hPutStrLn xmobarProc
   , ppTitle   = xmobarColor cBrightWhite cBlue . pad . shorten 75
   , ppCurrent = xmobarColor cBrightWhite cBlue . pad
@@ -244,10 +245,27 @@ myLogHook xmobarProc = dynamicLogWithPP xmobarPP
   , ppWsSep   = ""
   }
 
+polybarLogHook = dynamicLogWithPP (Polybar.defPolybarPP "/tmp/.xmonad-log")
+  { ppTitle = Polybar.color cBrightWhite cBlue . pad . shorten 75
+  , ppCurrent = Polybar.underline cBrightBlue . Polybar.color cBrightWhite cBlue . pad
+  , ppHidden = Polybar.color cWhite cBlack . pad
+  , ppVisible = Polybar.color cWhite cBlack . pad
+  , ppUrgent = Polybar.underline cRed . Polybar.color cWhite cBlack . pad
+  , ppLayout = const " "
+  -- , ppLayout = Polybar.color cWhite cBlack . pad . (":: " <>)
+  , ppSep = ""
+  , ppWsSep = ""
+  }
+
+myLogHook = polybarLogHook
+
 myStartupHook = setWMName "LG3D"
 
 main = do
-  xmobarProc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc"
+  -- xmobarProc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc"
+  spawn "~/.config/polybar/launch.sh"
+  safeSpawn "mkfifo" ["/tmp/.xmonad-log"]
+
   xmonad $ def
     { modMask            = myModMask
     , normalBorderColor  = myNormalBorderColour
@@ -260,7 +278,7 @@ main = do
     , mouseBindings      = myMouseBindings
     , manageHook         = myManageHook
     , layoutHook         = myLayoutHook
-    , logHook            = myLogHook xmobarProc
+    , logHook            = myLogHook
     , handleEventHook    = myHandleEventHook
     , startupHook        = myStartupHook
     }
