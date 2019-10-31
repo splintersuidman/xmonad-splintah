@@ -18,7 +18,7 @@ import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.SetWMName
 import           XMonad.Layout.NoBorders
 import           XMonad.Layout.SimplestFloat
--- import           XMonad.Layout.Spacing
+import           XMonad.Layout.Spacing
 import qualified XMonad.StackSet              as W
 
 data Colours = Colours
@@ -216,7 +216,7 @@ myMouseBindings XConfig {XMonad.modMask = modm} = Map.fromList
   ]
 
 myLayoutHook =
-  -- spacingRaw True (Border 2 2 2 2) True (Border 2 2 2 2) True $
+  spacingRaw True (Border 2 2 2 2) True (Border 2 2 2 2) True $
   avoidStruts $
   tiled ||| Mirror tiled ||| simplestFloat ||| noBorders Full
   where
