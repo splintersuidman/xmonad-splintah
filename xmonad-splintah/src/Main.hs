@@ -54,10 +54,10 @@ dmenuOptions = unwords
 myTerminal            = "urxvt -e tmux"
 myMusicPlayer         = "ncmpcpp"
 myFileBrowser         = "ranger"
-myModMask             = mod4Mask -- Windows key
+myModMask             = mod4Mask -- Super key
 myNormalBorderColour  = cBrightBlack
 myFocusedBorderColour = cBlue
-myBorderWidth         = 3
+myBorderWidth         = 2
 myFocusFollowsMouse   = True
 
 myWorkspaces = fmap show [1..9 :: Int]
