@@ -88,7 +88,7 @@ dmenuOptions = unwords
   , "-sf", wrap "'" "'" cBrightWhite
   ]
 
-myTerminal            = "urxvt -e screen"
+myTerminal            = "urxvt -e tmux"
 myMusicPlayer         = "ncmpcpp"
 myFileBrowser         = "ranger"
 myModMask             = mod4Mask -- Windows key
@@ -133,9 +133,9 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   -- Run passmenu
   , ((modm, xK_p), spawn $ "~/scripts/passmenu " <> dmenuOptions)
   -- Run file browser
-  , ((modm, xK_f), spawn $ myTerminal <> " " <> myFileBrowser)
+  , ((modm, xK_f), spawn $ myTerminal <> " -c " <> myFileBrowser)
   -- Run music player
-  , ((modm, xK_m), spawn $ myTerminal <> " " <> myMusicPlayer)
+  , ((modm, xK_m), spawn $ myTerminal <> " -c " <> myMusicPlayer)
   -- Run mpv with clipboard contents
   , ((modm, xK_v), spawn "~/scripts/mpvclip")
 
