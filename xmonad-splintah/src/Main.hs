@@ -226,9 +226,7 @@ myLayoutHook =
     delta = 3/100
 
 myManageHook = manageDocks <+> composeAll
-  [ className =? "Gimp"        --> doFloat
-  , className =? "mpv"         --> doFloat
-  , className =? "Tor Browser" --> doFloat
+  [ className =? "Tor Browser" --> doFloat
   ]
 
 myHandleEventHook = docksEventHook
