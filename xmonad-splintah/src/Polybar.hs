@@ -44,9 +44,9 @@ font f s = "%{T" <> show f <> "}" <> s <> "%{T-}"
 offset :: Int -> String -> String
 offset o s = "%{O" <> show o <> "}" <> s
 
-action :: Int -> String -> String
-action buttonIndex command =
-  "%{A" <> show buttonIndex <> ":" <> concatMap escapeColon command <> ":}"
+action :: Int -> String -> String -> String
+action buttonIndex command s =
+  "%{A" <> show buttonIndex <> ":" <> concatMap escapeColon command <> ":}" <> s <> "%{A}"
   where
     escapeColon ':' = "\\:"
     escapeColon c   = [c]
