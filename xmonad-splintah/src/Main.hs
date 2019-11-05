@@ -22,6 +22,7 @@ import           XMonad.Layout.SimplestFloat
 import           XMonad.Layout.Spacing
 import qualified XMonad.StackSet              as W
 import           XMonad.Util.Run              (safeSpawn, spawnPipe)
+import           XMonad.Util.Scratchpad
 
 colours = gruvbox
 
@@ -52,6 +53,7 @@ dmenuOptions = unwords
   ]
 
 myTerminal            = "urxvt -e tmux"
+myTerminalNamed n     = "urxvt -name '" <> n <> "' -e tmux"
 myMusicPlayer         = "ncmpcpp"
 myFileBrowser         = "ranger"
 myModMask             = mod4Mask -- Super key
@@ -96,9 +98,9 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   -- Run passmenu
   , ((modm, xK_p), spawn $ "~/scripts/passmenu " <> dmenuOptions)
   -- Run file browser
-  , ((modm, xK_f), spawn $ myTerminal <> " -c " <> myFileBrowser)
+  , ((modm, xK_f), spawn $ myTerminalNamed "ranger" <> " -c " <> myFileBrowser)
   -- Run music player
-  , ((modm, xK_m), spawn $ myTerminal <> " -c " <> myMusicPlayer)
+  , ((modm, xK_m), spawn $ myTerminalNamed "ncmpcpp" <> " -c " <> myMusicPlayer)
   -- Run mpv with clipboard contents
   , ((modm, xK_v), spawn "~/scripts/mpvclip")
 
@@ -141,6 +143,8 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   , ((modm, xK_period), sendMessage (IncMasterN (-1)))
   -- Restart xmonad
   , ((modm .|. shiftMask, xK_q), spawn "notify-send 'Recompiling xmonad...'; xmonad --recompile; xmonad --restart")
+  -- Spawn scratchpad.
+  , ((modm, xK_t), scratchpadSpawnActionCustom $ myTerminalNamed "scratchpad")
 
   ---- Audio and music
   -- Play/pause
@@ -187,9 +191,12 @@ myLayoutHook =
     ratio = 1/2
     delta = 3/100
 
-myManageHook = manageDocks <+> composeAll
-  [ className =? "Tor Browser" --> doFloat
-  ]
+myManageHook =
+  scratchpadManageHook (W.RationalRect 0.25 0.25 0.5 0.5) <+>
+  manageDocks <+>
+  composeAll
+    [ className =? "Tor Browser" --> doFloat
+    ]
 
 myHandleEventHook = docksEventHook
 
@@ -208,14 +215,16 @@ xmobarLogHook xmobarProc = dynamicLogWithPP xmobarPP
 polybarLogHook = dynamicLogWithPP (Polybar.defPolybarPP "/tmp/.xmonad-log")
   { ppTitle = Polybar.color cBrightWhite cBlue . pad . shorten 50
   , ppCurrent = Polybar.underline cBrightBlue . Polybar.color cBrightWhite cBlue . pad
-  , ppHidden = Polybar.color cWhite cBlack . pad
-  , ppVisible = Polybar.color cWhite cBlack . pad
+  , ppHidden = maybe "" (Polybar.color cWhite cBlack . pad) . filterOutNSP
+  , ppVisible = maybe "" (Polybar.color cWhite cBlack . pad) . filterOutNSP
   , ppUrgent = Polybar.underline cRed . Polybar.color cWhite cBlack . pad
   , ppLayout = const " "
-  -- , ppLayout = Polybar.color cWhite cBlack . pad . (":: " <>)
   , ppSep = ""
   , ppWsSep = ""
   }
+  where
+    filterOutNSP "NSP" = Nothing
+    filterOutNSP s     = Just s
 
 myLogHook = polybarLogHook
 
