@@ -107,6 +107,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
 
   ---- xmonad
   -- Kill focused window
+  , ((modm, xK_q), kill)
   , ((modm .|. shiftMask, xK_c), kill)
   -- Next layout
   , ((modm .|. shiftMask, xK_space), sendMessage NextLayout)
@@ -138,10 +139,8 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   , ((modm, xK_comma), sendMessage (IncMasterN 1))
   -- Decrement the number of windows in the master area
   , ((modm, xK_period), sendMessage (IncMasterN (-1)))
-  -- Quit xmonad
-  -- , ((m .|. shiftMask, xK_q), io (exitWith ExitSuccess))
   -- Restart xmonad
-  , ((modm, xK_q), spawn "notify-send 'Recompiling xmonad...'; xmonad --recompile; xmonad --restart")
+  , ((modm .|. shiftMask, xK_q), spawn "notify-send 'Recompiling xmonad...'; xmonad --recompile; xmonad --restart")
 
   ---- Audio and music
   -- Play/pause
