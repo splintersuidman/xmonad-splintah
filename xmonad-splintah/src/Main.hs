@@ -180,7 +180,7 @@ myMouseBindings XConfig {XMonad.modMask = modm} = Map.fromList
 myLayoutHook =
   spacingRaw True (Border 2 2 2 2) True (Border 2 2 2 2) True $
   avoidStruts $
-  tiled ||| Mirror tiled ||| simplestFloat ||| noBorders Full
+  tiled ||| Mirror tiled ||| noBorders Full ||| simplestFloat
   where
     tiled = Tall nmaster delta ratio
     nmaster = 1
