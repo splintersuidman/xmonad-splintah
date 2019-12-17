@@ -106,6 +106,8 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
 
   -- Switch keyboard layout.
   , ((modm, xK_slash), spawn "~/scripts/switch-keyboard.sh")
+  -- Hide bar.
+  , ((modm, xK_b), sendMessage ToggleStruts)
 
   ---- xmonad
   -- Kill focused window
