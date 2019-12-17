@@ -146,7 +146,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   -- Restart xmonad
   , ((modm .|. shiftMask, xK_q), spawn "notify-send 'Recompiling xmonad...'; xmonad --recompile; xmonad --restart")
   -- Spawn scratchpad.
-  , ((modm, xK_t), scratchpadSpawnActionCustom $ myTerminalNamed "scratchpad")
+  , ((modm, xK_s), scratchpadSpawnActionCustom $ myTerminalNamed "scratchpad")
 
   ---- Audio and music
   -- Play/pause
