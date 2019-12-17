@@ -233,8 +233,6 @@ myLogHook = polybarLogHook
 myStartupHook = setWMName "LG3D"
 
 main = do
-  -- xmobarProc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc"
-  spawn "~/.config/polybar/launch.sh"
   safeSpawn "mkfifo" ["/tmp/.xmonad-log"]
 
   xmonad $ def
