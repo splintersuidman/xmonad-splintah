@@ -123,7 +123,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   , ((modm, xK_j), windows W.focusDown >> mouseFollowsFocus)
   -- Focus previous window
   , ((modm, xK_k), windows W.focusUp >> mouseFollowsFocus)
-  -- Move mouse pointer to cetre of focused window
+  -- Move mouse pointer to centre of focused window
   , ((modm, xK_i), mouseFollowsFocus)
   -- Focus master
   -- , ((modm, xK_m), windows W.focusMaster)
