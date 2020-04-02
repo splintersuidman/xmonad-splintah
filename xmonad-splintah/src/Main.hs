@@ -95,18 +95,19 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   , ((modm, xK_e), spawn "emacs")
   -- Run dmenu
   , ((modm, xK_space), spawn $ "dmenu_run " <> dmenuOptions)
+  -- Run menu script.
+  , ((modm, xK_a), spawn "~/.local/bin/menu.scm")
   -- Run passmenu
-  , ((modm, xK_p), spawn $ "~/scripts/passmenu " <> dmenuOptions)
+  , ((modm, xK_p), spawn $ "~/.local/bin/passmenu " <> dmenuOptions)
   -- Run file browser
   , ((modm, xK_f), spawn $ myTerminalNamed "ranger" <> " -c " <> myFileBrowser)
   -- Run music player
   , ((modm, xK_m), spawn $ myTerminalNamed "ncmpcpp" <> " -c " <> myMusicPlayer)
   -- Run mpv with clipboard contents
-  , ((modm, xK_v), spawn "~/scripts/mpvclip")
+  , ((modm, xK_v), spawn "~/.local/bin/mpvclip")
 
   -- Switch keyboard layout.
-  , ((modm, xK_slash), spawn "~/scripts/switch-keyboard.sh")
-  -- Hide bar.
+  , ((modm, xK_slash), spawn "~/.local/bin/switch-keyboard.sh")
   , ((modm, xK_b), sendMessage ToggleStruts)
 
   ---- xmonad
@@ -152,6 +153,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   -- Play/pause
   , ((0, xF86XK_Launch1), spawn "mpc toggle")
   , ((0, xF86XK_AudioPlay), spawn "mpc toggle")
+  , ((0, xK_Pause), spawn "mpc toggle")
   -- Pause
   , ((0, xF86XK_AudioStop), spawn "mpc pause")
   -- Next track
@@ -160,8 +162,10 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   , ((0, xF86XK_AudioPrev), spawn "mpc prev")
   -- Lower volume
   , ((0, xF86XK_AudioLowerVolume), spawn "amixer sset Master 5%-")
+  , ((modm, xK_Page_Down), spawn "amixer sset Master 5%-")
   -- Raise volume
   , ((0, xF86XK_AudioRaiseVolume), spawn "amixer sset Master 5%+")
+  , ((modm, xK_Page_Up), spawn "amixer sset Master 5%+")
   ]
   <>
   [ ((modm .|. m, k), windows $ f i)
