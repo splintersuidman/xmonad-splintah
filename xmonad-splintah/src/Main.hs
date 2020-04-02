@@ -108,6 +108,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
 
   -- Switch keyboard layout.
   , ((modm, xK_slash), spawn "~/.local/bin/switch-keyboard.sh")
+  -- Toggle bar.
   , ((modm, xK_b), sendMessage ToggleStruts)
 
   ---- xmonad
@@ -249,7 +250,7 @@ polybarLogHook = dynamicLogWithPP (Polybar.defPolybarPP "/tmp/.xmonad-log")
 
 myLogHook = polybarLogHook
 
-myStartupHook = setWMName "LG3D"
+myStartupHook = docksStartupHook <+> setWMName "LG3D"
 
 main = do
   safeSpawn "mkfifo" ["/tmp/.xmonad-log"]
