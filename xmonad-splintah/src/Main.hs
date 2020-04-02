@@ -44,7 +44,7 @@ cBrightCyan   = brightCyan colours
 cBrightWhite  = brightWhite colours
 
 dmenuOptions = unwords
-  ["-fn", "Iosevka:size=9"
+  ["-fn", "'Dejavu Sans Mono:size=10'"
   , "-i"
   , "-nb", wrap "'" "'" cBlack
   , "-nf", wrap "'" "'" cWhite
