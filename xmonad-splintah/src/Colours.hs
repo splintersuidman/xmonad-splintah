@@ -37,3 +37,41 @@ gruvbox = Colours
   , brightCyan   = "#8ec07c"
   , brightWhite  = "#ebdbb2"
   }
+
+spacemacsThemeDark = Colours
+  { black        = "#292b2e"
+  , red          = "#f2241f"
+  , green        = "#67b11d"
+  , yellow       = "#b1951d"
+  , blue         = "#4f97d7"
+  , purple       = "#a31db1"
+  , cyan         = "#28def0"
+  , white        = "#a89984"
+  , brightBlack  = "#212026"
+  , brightRed    = "#f2241f"
+  , brightGreen  = "#67b11d"
+  , brightYellow = "#b1951d"
+  , brightBlue   = "#2d9574"
+  , brightPurple = "#a31db1"
+  , brightCyan   = "#28def0"
+  , brightWhite  = "#a89984"
+  }
+
+greenDarkColours = Colours
+  { black        = "#000000"
+  , red          = "#ec6363"
+  , green        = "#4adb5c"
+  , yellow       = "#a6c35e"
+  , blue         = "#4697db"
+  , purple       = "#b883d8"
+  , cyan         = "#4eb6a9"
+  , white        = "#787878"
+  , brightBlack  = "#111111"
+  , brightRed    = "#ec6363"
+  , brightGreen  = "#4adb5c"
+  , brightYellow = "#a6c35e"
+  , brightBlue   = "#4697db"
+  , brightPurple = "#b883d8"
+  , brightCyan   = "#4eb6a9"
+  , brightWhite  = "#a5a5a5"
+  }

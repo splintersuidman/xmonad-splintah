@@ -24,7 +24,7 @@ import qualified XMonad.StackSet              as W
 import           XMonad.Util.Run              (safeSpawn, spawnPipe)
 import           XMonad.Util.Scratchpad
 
-colours = gruvbox
+colours = greenDarkColours
 
 cBlack        = black colours
 cRed          = red colours
@@ -48,8 +48,8 @@ dmenuOptions = unwords
   , "-i"
   , "-nb", wrap "'" "'" cBlack
   , "-nf", wrap "'" "'" cWhite
-  , "-sb", wrap "'" "'" cBlue
-  , "-sf", wrap "'" "'" cBrightWhite
+  , "-sb", wrap "'" "'" cGreen
+  , "-sf", wrap "'" "'" cBrightBlack
   ]
 
 myTerminal            = "urxvt -e tmux"
@@ -58,7 +58,7 @@ myMusicPlayer         = "ncmpcpp"
 myFileBrowser         = "ranger"
 myModMask             = mod4Mask -- Super key
 myNormalBorderColour  = cBrightBlack
-myFocusedBorderColour = cBlue
+myFocusedBorderColour = cGreen
 myBorderWidth         = 2
 myFocusFollowsMouse   = True
 
@@ -214,12 +214,27 @@ xmobarLogHook xmobarProc = dynamicLogWithPP xmobarPP
   , ppWsSep   = ""
   }
 
+---- Gruvbox ----
+-- polybarLogHook = dynamicLogWithPP (Polybar.defPolybarPP "/tmp/.xmonad-log")
+--   { ppTitle = Polybar.color cBrightWhite cBlue . pad . shorten 50
+--   , ppCurrent = Polybar.underline cBrightBlue . Polybar.color cBrightWhite cBlue . pad
+--   , ppHidden = maybe "" (Polybar.color cWhite cBlack . pad) . filterOutNSP
+--   , ppVisible = maybe "" (Polybar.color cWhite cBlack . pad) . filterOutNSP
+--   , ppUrgent = Polybar.underline cRed . Polybar.color cWhite cBlack . pad
+--   , ppLayout = const " "
+--   , ppSep = ""
+--   , ppWsSep = ""
+--   }
+--   where
+--     filterOutNSP "NSP" = Nothing
+--     filterOutNSP s     = Just s
+
 polybarLogHook = dynamicLogWithPP (Polybar.defPolybarPP "/tmp/.xmonad-log")
-  { ppTitle = Polybar.color cBrightWhite cBlue . pad . shorten 50
-  , ppCurrent = Polybar.underline cBrightBlue . Polybar.color cBrightWhite cBlue . pad
-  , ppHidden = maybe "" (Polybar.color cWhite cBlack . pad) . filterOutNSP
-  , ppVisible = maybe "" (Polybar.color cWhite cBlack . pad) . filterOutNSP
-  , ppUrgent = Polybar.underline cRed . Polybar.color cWhite cBlack . pad
+  { ppTitle = Polybar.foreground cBrightWhite . Polybar.font 1 . pad . shorten 50
+  , ppCurrent = Polybar.underline cGreen . Polybar.color cBlack cGreen . pad
+  , ppHidden = maybe "" (Polybar.foreground cWhite . pad) . filterOutNSP
+  , ppVisible = maybe "" (Polybar.foreground cWhite . pad) . filterOutNSP
+  , ppUrgent = Polybar.underline cRed . Polybar.foreground cWhite . pad
   , ppLayout = const " "
   , ppSep = ""
   , ppWsSep = ""
