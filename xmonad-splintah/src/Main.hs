@@ -229,12 +229,7 @@ myLayoutHook =
     ratio = 1/2
     delta = 3/100
 
-myManageHook =
-  scratchpadManageHook (W.RationalRect 0.25 0.25 0.5 0.5) <+>
-  manageDocks <+>
-  composeAll
-    [ className =? "Tor Browser" --> doFloat
-    ]
+myManageHook = scratchpadManageHook (W.RationalRect 0.25 0.25 0.5 0.5) <+> manageDocks
 
 myHandleEventHook = docksEventHook
 
