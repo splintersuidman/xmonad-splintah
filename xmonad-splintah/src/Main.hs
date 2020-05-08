@@ -20,6 +20,16 @@ import           XMonad.Layout.Fullscreen
 import           XMonad.Layout.NoBorders
 import           XMonad.Layout.SimplestFloat
 import           XMonad.Layout.Spacing
+import           XMonad.Prompt
+import           XMonad.Prompt.FuzzyMatch     (fuzzyMatch, fuzzySort)
+import           XMonad.Prompt.Pass           (passEditPrompt,
+                                               passGeneratePrompt, passPrompt,
+                                               passRemovePrompt)
+import           XMonad.Prompt.Shell          (shellPrompt)
+import           XMonad.Prompt.Window         (WindowPrompt (Bring, Goto),
+                                               allWindows, windowPrompt,
+                                               wsWindows)
+import           XMonad.Prompt.Workspace      (workspacePrompt)
 import qualified XMonad.StackSet              as W
 import           XMonad.Util.Run              (safeSpawn, spawnPipe)
 import           XMonad.Util.Scratchpad
@@ -43,15 +53,6 @@ cBrightPurple = brightPurple colours
 cBrightCyan   = brightCyan colours
 cBrightWhite  = brightWhite colours
 
-dmenuOptions = unwords
-  ["-fn", "'Dejavu Sans Mono:size=10'"
-  , "-i"
-  , "-nb", wrap "'" "'" cBlack
-  , "-nf", wrap "'" "'" cWhite
-  , "-sb", wrap "'" "'" cGreen
-  , "-sf", wrap "'" "'" cBrightBlack
-  ]
-
 myTerminal            = "urxvt -e tmux"
 myTerminalNamed n     = "urxvt -name '" <> n <> "' -e tmux"
 myFileBrowser         = "ranger"
@@ -60,6 +61,22 @@ myNormalBorderColour  = cBrightBlack
 myFocusedBorderColour = cGreen
 myBorderWidth         = 2
 myFocusFollowsMouse   = True
+
+myPromptConfig = def
+  { font = "xft:DejaVu Sans Mono:size=10:antialias=true:autohint=true"
+  , bgColor = cBlack
+  , fgColor = cWhite
+  , bgHLight = cGreen
+  , fgHLight = cBrightBlack
+  , borderColor = cGreen
+  , alwaysHighlight = True
+  , promptBorderWidth = myBorderWidth
+  , position = CenteredAt (1 / 8) (3 / 4)
+  , height = 25
+  , searchPredicate = fuzzyMatch
+  , sorter = fuzzySort
+  , promptKeymap = vimLikeXPKeymap <> emacsLikeXPKeymap <> defaultXPKeymap
+  }
 
 myWorkspaces = fmap show [1..9 :: Int]
 
@@ -87,12 +104,8 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   ---- Applications
   -- Launch terminal
   [ ((modm, xK_Return), spawn myTerminal)
-  -- Run dmenu
-  , ((modm, xK_space), spawn $ "dmenu_run " <> dmenuOptions)
   -- Run menu script.
   , ((modm, xK_a), spawn "~/.local/bin/menu.scm")
-  -- Run passmenu
-  , ((modm, xK_p), spawn $ "~/.local/bin/passmenu " <> dmenuOptions)
   -- Run file browser
   , ((modm, xK_f), spawn $ myTerminalNamed "ranger" <> " -c " <> myFileBrowser)
   -- Run mpv with clipboard contents
@@ -145,6 +158,28 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   , ((modm .|. shiftMask, xK_q), spawn "notify-send 'Recompiling xmonad...'; xmonad --recompile; xmonad --restart")
   -- Spawn scratchpad.
   , ((modm, xK_s), scratchpadSpawnActionCustom $ myTerminalNamed "scratchpad")
+
+  ---- Prompt
+  -- Shell prompt
+  , ((modm, xK_space), shellPrompt myPromptConfig)
+  -- Go to workspace
+  , ((modm, xK_m), workspacePrompt myPromptConfig (windows . W.greedyView))
+  -- Move window to workspace
+  , ((modm .|. shiftMask, xK_m), workspacePrompt myPromptConfig (windows . W.shift))
+  -- Go to window on workspace
+  , ((modm, xK_w), windowPrompt myPromptConfig Goto wsWindows)
+  -- Go to window
+  , ((modm .|. controlMask, xK_w), windowPrompt myPromptConfig Goto allWindows)
+  -- Bring window
+  , ((modm .|. shiftMask, xK_w), windowPrompt myPromptConfig Bring allWindows)
+  -- Pass
+  , ((modm , xK_p), passPrompt myPromptConfig)
+  -- Pass generate
+  , ((modm .|. shiftMask, xK_p), passGeneratePrompt myPromptConfig)
+  -- Pass edit
+  , ((modm .|. controlMask, xK_p), passEditPrompt myPromptConfig)
+  -- Pass remove
+  , ((modm .|. controlMask  .|. shiftMask, xK_p), passRemovePrompt myPromptConfig)
 
   ---- Audio and music
   -- Play/pause
