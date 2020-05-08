@@ -8,7 +8,6 @@ import           Colours
 import qualified Data.Map                     as Map
 import           Foreign.C.Types              (CInt (..))
 import           Graphics.X11.ExtraTypes.XF86
-import           Graphics.X11.Xlib.Misc
 import qualified Polybar
 import           System.IO
 import           XMonad
