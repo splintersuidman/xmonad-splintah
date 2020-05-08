@@ -233,16 +233,14 @@ xmobarLogHook xmobarProc = dynamicLogWithPP xmobarPP
 polybarLogHook = dynamicLogWithPP (Polybar.defPolybarPP "/tmp/.xmonad-log")
   { ppTitle = Polybar.foreground cBrightWhite . Polybar.font 1 . pad . shorten 50
   , ppCurrent = Polybar.underline cGreen . Polybar.color cBlack cGreen . pad
-  , ppHidden = maybe "" (Polybar.foreground cWhite . pad) . filterOutNSP
-  , ppVisible = maybe "" (Polybar.foreground cWhite . pad) . filterOutNSP
+  , ppHidden = Polybar.foreground cWhite . pad
+  , ppVisible = Polybar.foreground cWhite . pad
   , ppUrgent = Polybar.underline cRed . Polybar.foreground cWhite . pad
   , ppLayout = const " "
   , ppSep = ""
   , ppWsSep = ""
+  , ppSort = (scratchpadFilterOutWorkspace .) <$> ppSort def
   }
-  where
-    filterOutNSP "NSP" = Nothing
-    filterOutNSP s     = Just s
 
 myLogHook = polybarLogHook
 
