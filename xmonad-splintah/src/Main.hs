@@ -16,6 +16,7 @@ import           XMonad.Actions.CycleWS       (nextWS, prevWS)
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.SetWMName
+import           XMonad.Layout.Fullscreen
 import           XMonad.Layout.NoBorders
 import           XMonad.Layout.SimplestFloat
 import           XMonad.Layout.Spacing
@@ -250,7 +251,7 @@ myStartupHook = docksStartupHook <+> setWMName "LG3D"
 main = do
   safeSpawn "mkfifo" ["/tmp/.xmonad-log"]
 
-  xmonad $ def
+  xmonad . fullscreenSupport $ def
     { modMask            = myModMask
     , normalBorderColor  = myNormalBorderColour
     , focusedBorderColor = myFocusedBorderColour
