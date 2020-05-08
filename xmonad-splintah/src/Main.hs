@@ -12,6 +12,7 @@ import qualified Polybar
 import           System.IO
 import           XMonad
 import           XMonad.Actions.CopyWindow
+import           XMonad.Actions.CycleWS       (nextWS, prevWS)
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.SetWMName
@@ -125,10 +126,14 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   , ((modm .|. shiftMask, xK_j), windows W.swapDown)
   -- Swap focused window with above window
   , ((modm .|. shiftMask, xK_k), windows W.swapUp)
+  -- Previous workspace
+  , ((modm, xK_h), prevWS)
+  -- Next workspace
+  , ((modm, xK_l), nextWS)
   -- Shrink master area
-  , ((modm, xK_h), sendMessage Shrink)
+  , ((modm .|. shiftMask, xK_h), sendMessage Shrink)
   -- Expand master area
-  , ((modm, xK_l), sendMessage Expand)
+  , ((modm .|. shiftMask, xK_l), sendMessage Expand)
   -- Tile window
   , ((modm, xK_t), withFocused $ windows . W.sink)
   -- Increment the number of windows in the master area
