@@ -52,7 +52,6 @@ dmenuOptions = unwords
 
 myTerminal            = "urxvt -e tmux"
 myTerminalNamed n     = "urxvt -name '" <> n <> "' -e tmux"
-myMusicPlayer         = "ncmpcpp"
 myFileBrowser         = "ranger"
 myModMask             = mod4Mask -- Super key
 myNormalBorderColour  = cBrightBlack
@@ -86,8 +85,6 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   ---- Applications
   -- Launch terminal
   [ ((modm, xK_Return), spawn myTerminal)
-  -- Launch Emacs.
-  , ((modm, xK_e), spawn "emacs")
   -- Run dmenu
   , ((modm, xK_space), spawn $ "dmenu_run " <> dmenuOptions)
   -- Run menu script.
@@ -96,8 +93,6 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   , ((modm, xK_p), spawn $ "~/.local/bin/passmenu " <> dmenuOptions)
   -- Run file browser
   , ((modm, xK_f), spawn $ myTerminalNamed "ranger" <> " -c " <> myFileBrowser)
-  -- Run music player
-  , ((modm, xK_m), spawn $ myTerminalNamed "ncmpcpp" <> " -c " <> myMusicPlayer)
   -- Run mpv with clipboard contents
   , ((modm, xK_v), spawn "~/.local/bin/mpvclip")
 
