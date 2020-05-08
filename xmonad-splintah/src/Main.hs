@@ -6,8 +6,7 @@ module Main where
 
 import           Colours
 import qualified Data.Map                     as Map
-import           Foreign
-import           Foreign.C.Types
+import           Foreign.C.Types              (CInt (..))
 import           Graphics.X11.ExtraTypes.XF86
 import           Graphics.X11.Xlib.Misc
 import qualified Polybar
@@ -73,8 +72,8 @@ mouseToWindowCentre display window = liftIO $ do
   -- destination window (the third argument, here 'window'). The x and y
   -- coordinates of the focused window are thus not needed to move the mouse
   -- pointer to the centre of the window.
-  let x = unCInt (width  `div` 2)
-  let y = unCInt (height `div` 2)
+  let CInt x = width  `div` 2
+  let CInt y = height `div` 2
   warpPointer display 0 window 0 0 0 0 x y
 
 -- | Move the mouse pointer to the centre of the focused window.
@@ -83,9 +82,6 @@ mouseFollowsFocus =
   withFocused $ \window ->
   withDisplay $ \display ->
   mouseToWindowCentre display window
-
--- | Removes the 'CInt' constructor.
-unCInt (CInt i) = i
 
 myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   ---- Applications
