@@ -5,6 +5,7 @@
 module Main where
 
 import           Colours
+import           Data.Char                    (isSpace)
 import qualified Data.Map                     as Map
 import           Foreign.C.Types              (CInt (..))
 import           Graphics.X11.ExtraTypes.XF86
@@ -20,7 +21,7 @@ import           XMonad.Layout.Fullscreen
 import           XMonad.Layout.NoBorders
 import           XMonad.Layout.SimplestFloat
 import           XMonad.Layout.Spacing
-import           XMonad.Prompt
+import           XMonad.Prompt                as Prompt
 import           XMonad.Prompt.FuzzyMatch     (fuzzyMatch, fuzzySort)
 import           XMonad.Prompt.Pass           (passEditPrompt,
                                                passGeneratePrompt, passPrompt,
@@ -68,14 +69,17 @@ myPromptConfig = def
   , fgColor = cWhite
   , bgHLight = cGreen
   , fgHLight = cBrightBlack
-  , borderColor = cGreen
+  , borderColor = myFocusedBorderColour
   , alwaysHighlight = True
   , promptBorderWidth = myBorderWidth
   , position = CenteredAt (1 / 8) (3 / 4)
   , height = 25
   , searchPredicate = fuzzyMatch
   , sorter = fuzzySort
-  , promptKeymap = vimLikeXPKeymap <> emacsLikeXPKeymap <> defaultXPKeymap
+  , promptKeymap = Map.fromList [((myModMask, xK_space), Prompt.quit)]
+                <> vimLikeXPKeymap' (setBorderColor myNormalBorderColour) id id isSpace
+                <> emacsLikeXPKeymap
+                <> defaultXPKeymap
   }
 
 myWorkspaces = fmap show [1..9 :: Int]
