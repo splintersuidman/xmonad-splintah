@@ -1,5 +1,5 @@
-{ mkDerivation, base, containers, stdenv, X11, xmonad
-, xmonad-contrib
+{ mkDerivation, base, containers, process, stdenv, X11
+, xmonad, xmonad-contrib
 }:
 mkDerivation {
   pname = "xmonad-splintah";
@@ -8,7 +8,7 @@ mkDerivation {
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
-    base containers X11 xmonad xmonad-contrib
+    base containers process X11 xmonad xmonad-contrib
   ];
   license = stdenv.lib.licenses.agpl3;
 }

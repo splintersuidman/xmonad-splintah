@@ -9,6 +9,7 @@ import           Data.Char                    (isSpace)
 import qualified Data.Map                     as Map
 import           Foreign.C.Types              (CInt (..))
 import           Graphics.X11.ExtraTypes.XF86
+import           MPRIS
 import qualified Polybar
 import           System.IO
 import           XMonad
@@ -187,11 +188,11 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
 
   ---- Audio and music
   -- Play/pause
-  , ((0, xF86XK_Launch1), spawn "mpc toggle")
-  , ((0, xF86XK_AudioPlay), spawn "mpc toggle")
-  , ((0, xK_Pause), spawn "mpc toggle")
+  , ((0, xF86XK_Launch1), mprisToggle)
+  , ((0, xF86XK_AudioPlay), mprisToggle)
+  , ((0, xK_Pause), mprisToggle)
   -- Pause
-  , ((0, xF86XK_AudioStop), spawn "mpc pause")
+  , ((0, xF86XK_AudioStop), mprisStopAll)
   -- Next track
   , ((0, xF86XK_AudioNext), spawn "mpc next")
   -- Previous track
@@ -278,7 +279,7 @@ polybarLogHook = dynamicLogWithPP (Polybar.defPolybarPP "/tmp/.xmonad-log")
 
 myLogHook = polybarLogHook
 
-myStartupHook = docksStartupHook <+> setWMName "LG3D"
+myStartupHook = docksStartupHook <+> setWMName "LG3D" <+> mprisCreateProcess
 
 main = do
   safeSpawn "mkfifo" ["/tmp/.xmonad-log"]
