@@ -11,6 +11,7 @@ import           Foreign.C.Types              (CInt (..))
 import           Graphics.X11.ExtraTypes.XF86
 import           MPRIS
 import qualified Polybar
+import           Scripts.SwitchKeyboard       (switchKeyboard)
 import           System.IO
 import           XMonad
 import           XMonad.Actions.CopyWindow
@@ -117,7 +118,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   , ((modm, xK_v), spawn "~/.local/bin/mpvclip")
 
   -- Switch keyboard layout.
-  , ((modm, xK_slash), spawn "~/.local/bin/switch-keyboard.sh")
+  , ((modm, xK_slash), switchKeyboard)
   -- Toggle bar.
   , ((modm, xK_b), sendMessage ToggleStruts)
 
