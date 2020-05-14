@@ -184,7 +184,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   -- Pass edit
   , ((modm .|. controlMask, xK_p), passEditPrompt myPromptConfig)
   -- Pass remove
-  , ((modm .|. controlMask  .|. shiftMask, xK_p), passRemovePrompt myPromptConfig)
+  , ((modm .|. controlMask .|. shiftMask, xK_p), passRemovePrompt myPromptConfig)
 
   ---- Audio and music
   -- Play/pause
