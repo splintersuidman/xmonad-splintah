@@ -1,6 +1,4 @@
-{-# LANGUAGE DeriveDataTypeable #-}
-{-# LANGUAGE NamedFieldPuns     #-}
-{-# LANGUAGE TypeApplications   #-}
+{-# LANGUAGE NamedFieldPuns #-}
 
 module MPRIS
   ( -- $info
@@ -13,10 +11,8 @@ module MPRIS
   , mprisStopAll
   ) where
 
-import           Codec.Binary.UTF8.String    (encodeString)
-import           Control.Monad               (when)
+import           Control.Monad               (unless, when)
 import           Data.Bifunctor              (first, second)
-import           Data.Dynamic                (Typeable)
 import           Data.Foldable               (for_, traverse_)
 import           Data.Maybe                  (isJust)
 import           System.IO
@@ -182,7 +178,7 @@ mprisPlayLastPlayer :: X ()
 mprisPlayLastPlayer = do
   handleMprisEvents
   MprisState { lastPlayer } <- XS.get
-  when (not . null $ lastPlayer) $
+  unless (null lastPlayer) $
     safeSpawn "playerctl" ["--player", lastPlayer, "play"]
 
 -- | If there are playing players, pause them all, otherwise play the
