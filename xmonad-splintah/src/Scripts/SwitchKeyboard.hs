@@ -4,7 +4,6 @@ module Scripts.SwitchKeyboard
 
 import Data.Char       (isSpace)
 import Data.List       (isPrefixOf)
-import System.Process
 import XMonad
 import XMonad.Util.Run (runProcessWithInput, safeSpawn)
 
