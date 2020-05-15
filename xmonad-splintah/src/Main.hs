@@ -11,6 +11,7 @@ import           Foreign.C.Types              (CInt (..))
 import           Graphics.X11.ExtraTypes.XF86
 import           MPRIS
 import qualified Polybar
+import           Scripts.MpvClip              (mpvClip)
 import           Scripts.SwitchKeyboard       (switchKeyboard)
 import           System.IO
 import           XMonad
@@ -115,7 +116,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   -- Run file browser
   , ((modm, xK_f), spawn $ myTerminalNamed "ranger" <> " -c " <> myFileBrowser)
   -- Run mpv with clipboard contents
-  , ((modm, xK_v), spawn "~/.local/bin/mpvclip")
+  , ((modm, xK_v), mpvClip)
 
   -- Switch keyboard layout.
   , ((modm, xK_slash), switchKeyboard)
