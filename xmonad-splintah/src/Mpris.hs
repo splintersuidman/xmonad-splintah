@@ -1,14 +1,19 @@
 {-# LANGUAGE NamedFieldPuns #-}
 
-module MPRIS
+module Mpris
   ( -- $info
     -- * Usage
     -- $usage
     mprisCreateProcess
   , mprisToggle
+  , mprisPlay
+  , mprisPause
+  , mprisStop
   , mprisPlayAll
   , mprisPauseAll
   , mprisStopAll
+
+  , mprisPrompt
   ) where
 
 import           Control.Monad               (unless, when)
@@ -19,6 +24,7 @@ import           System.IO
 import           System.Process
 import           XMonad
 import           XMonad.Config.Prime         (ExtensionClass (..))
+import           XMonad.Prompt
 import qualified XMonad.Util.ExtensibleState as XS
 import           XMonad.Util.Run             (runProcessWithInput, safeSpawn)
 
@@ -42,8 +48,15 @@ import           XMonad.Util.Run             (runProcessWithInput, safeSpawn)
 --
 -- Add to your keybindings something like:
 --
--- >   , ((modm, xF86XK_AudioPlay), mprisToggle)
--- >   , ((modm, xF86XK_AudioStop), mprisStopAll)
+-- >   , ((0, xF86XK_AudioPlay), mprisToggle)
+-- >   , ((0, xF86XK_AudioStop), mprisStopAll)
+--
+-- To use the prompt, you can add to your keybindings something like:
+--
+-- >   , ((modm, xF86XK_AudioPlay), mprisPrompt def)
+
+--------------------------------------------------------------------------------
+-- Player control --------------------------------------------------------------
 
 -- | The state for handling Mpris commands.
 data MprisState = MprisState
@@ -155,6 +168,22 @@ handleMprisEvents = do
   events <- fetchMprisEvents
   traverse_ handleMprisEvent events
 
+-- | @mprisPlay p@ plays player @p@.
+mprisPlay :: String -> X ()
+mprisPlay p = mprisPlayer p "play"
+
+-- | @mprisPause p@ pauses player @p@.
+mprisPause :: String -> X ()
+mprisPause p = mprisPlayer p "pause"
+
+-- | @mprisStop p@ stops player @p@.
+mprisStop :: String -> X ()
+mprisStop p = mprisPlayer p "stop"
+
+-- | @mprisPlayer p a@ runs action @a@ on player @p@.
+mprisPlayer :: String -> String -> X ()
+mprisPlayer p a = safeSpawn "playerctl" ["--player", p, a]
+
 -- | Play all players.
 mprisPlayAll :: X ()
 mprisPlayAll = mprisAll "play"
@@ -167,7 +196,7 @@ mprisPauseAll = mprisAll "pause"
 mprisStopAll :: X ()
 mprisStopAll = mprisAll "stop"
 
--- | Run an action on all players.
+-- | @mprisAll a@ runs action @a@ on all players.
 mprisAll :: String -> X ()
 mprisAll action = safeSpawn "playerctl" ["--all-players", action]
 
@@ -208,3 +237,43 @@ mprisStatusIO = do
     ""
   let players = fmap (second read . splitOn (== ' ')) . lines $ status
   pure players
+
+--------------------------------------------------------------------------------
+-- Prompt ----------------------------------------------------------------------
+
+data MprisPrompt = MprisPrompt
+
+instance XPrompt MprisPrompt where
+  showXPrompt _ = "Toggle playing: "
+
+type Predicate = String -> String -> Bool
+
+getMprisCompl :: [String] -> Predicate -> String -> IO [String]
+getMprisCompl compls p s = pure $ filter (p s) compls
+
+-- | The MPRIS prompt. The selected option will be toggled; paused and
+-- stopped players will be set to playing, playing players will be
+-- paused.
+mprisPrompt :: XPConfig -> X ()
+mprisPrompt c = do
+  status <- mprisStatus
+  let players = fmap showOption status
+  mkXPrompt MprisPrompt c (getMprisCompl players $ searchPredicate c) $ \option -> do
+    let (player, status) = readOption option
+    case status of
+      Playing -> mprisPause player
+      Paused  -> mprisPlay player
+      Stopped -> mprisPlay player
+  where
+    -- For showOption and readOption the following laws should hold
+    -- for valid inputs:
+    -- - showOption . readOption == id
+    -- - readOption . showOption == id
+
+    showOption :: (String, PlaybackStatus) -> String
+    showOption (player, status) = player <> " (" <> show status <> ")"
+
+    readOption :: String -> (String, PlaybackStatus)
+    readOption = second (read . unwrapParens) . splitOn (== ' ')
+      where
+        unwrapParens = takeWhile (/= ')') . dropWhile (== '(')

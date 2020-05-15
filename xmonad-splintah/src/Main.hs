@@ -9,7 +9,7 @@ import           Data.Char                    (isSpace)
 import qualified Data.Map                     as Map
 import           Foreign.C.Types              (CInt (..))
 import           Graphics.X11.ExtraTypes.XF86
-import           MPRIS
+import           Mpris
 import qualified Polybar
 import           Scripts.MpvClip              (mpvClip)
 import           Scripts.SwitchKeyboard       (switchKeyboard)
@@ -193,6 +193,9 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   , ((0, xF86XK_Launch1), mprisToggle)
   , ((0, xF86XK_AudioPlay), mprisToggle)
   , ((0, xK_Pause), mprisToggle)
+  , ((modm, xF86XK_Launch1), mprisPrompt myPromptConfig)
+  , ((modm, xF86XK_AudioPlay), mprisPrompt myPromptConfig)
+  , ((modm, xK_Pause), mprisPrompt myPromptConfig)
   -- Pause
   , ((0, xF86XK_AudioStop), mprisStopAll)
   -- Next track
