@@ -24,7 +24,8 @@ import           System.IO
 import           System.Process
 import           XMonad
 import           XMonad.Config.Prime         (ExtensionClass (..))
-import           XMonad.Prompt
+import           XMonad.Prompt               (XPConfig (..), XPrompt (..),
+                                              mkXPrompt)
 import qualified XMonad.Util.ExtensibleState as XS
 import           XMonad.Util.Run             (runProcessWithInput, safeSpawn)
 
@@ -103,7 +104,7 @@ processIsTerminated :: ProcessHandle -> IO Bool
 processIsTerminated handle = isJust <$> getProcessExitCode handle
 
 -- | The plackback status as per
--- https://specifications.freedesktop.org/mpris-spec/latest/Player_Interface.html#Property:PlaybackStatus.
+-- <https://specifications.freedesktop.org/mpris-spec/latest/Player_Interface.html#Property:PlaybackStatus the specification>.
 --
 -- The 'Read' and 'Show' instances conform to the specification.
 data PlaybackStatus
