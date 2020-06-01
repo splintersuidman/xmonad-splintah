@@ -5,37 +5,42 @@
 module Main where
 
 import           Colours
-import           Data.Char                    (isSpace)
-import qualified Data.Map                     as Map
-import           Foreign.C.Types              (CInt (..))
+import           Data.Char                      (isSpace)
+import qualified Data.Map                       as Map
+import           Foreign.C.Types                (CInt (..))
 import           Graphics.X11.ExtraTypes.XF86
 import           Mpris
 import qualified Polybar
-import           Scripts.MpvClip              (mpvClip)
-import           Scripts.SwitchKeyboard       (switchKeyboard)
+import           Scripts.MpvClip                (mpvClip)
+import           Scripts.SwitchKeyboard         (switchKeyboard)
 import           System.IO
 import           XMonad
 import           XMonad.Actions.CopyWindow
-import           XMonad.Actions.CycleWS       (nextWS, prevWS)
+import           XMonad.Actions.CycleWS         (nextWS, prevWS)
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.SetWMName
 import           XMonad.Layout.Fullscreen
 import           XMonad.Layout.NoBorders
+import           XMonad.Layout.Simplest         (Simplest (..))
 import           XMonad.Layout.SimplestFloat
 import           XMonad.Layout.Spacing
-import           XMonad.Prompt                as Prompt
-import           XMonad.Prompt.FuzzyMatch     (fuzzyMatch, fuzzySort)
-import           XMonad.Prompt.Pass           (passEditPrompt,
-                                               passGeneratePrompt, passPrompt,
-                                               passRemovePrompt)
-import           XMonad.Prompt.Shell          (shellPrompt)
-import           XMonad.Prompt.Window         (WindowPrompt (Bring, Goto),
-                                               allWindows, windowPrompt,
-                                               wsWindows)
-import           XMonad.Prompt.Workspace      (workspacePrompt)
-import qualified XMonad.StackSet              as W
-import           XMonad.Util.Run              (safeSpawn, spawnPipe)
+import           XMonad.Layout.SubLayouts
+import           XMonad.Layout.Tabbed           (Theme (..), addTabs,
+                                                 shrinkText)
+import           XMonad.Layout.WindowNavigation (windowNavigation)
+import           XMonad.Prompt                  as Prompt
+import           XMonad.Prompt.FuzzyMatch       (fuzzyMatch, fuzzySort)
+import           XMonad.Prompt.Pass             (passEditPrompt,
+                                                 passGeneratePrompt, passPrompt,
+                                                 passRemovePrompt)
+import           XMonad.Prompt.Shell            (shellPrompt)
+import           XMonad.Prompt.Window           (WindowPrompt (Bring, Goto),
+                                                 allWindows, windowPrompt,
+                                                 wsWindows)
+import           XMonad.Prompt.Workspace        (workspacePrompt)
+import qualified XMonad.StackSet                as W
+import           XMonad.Util.Run                (safeSpawn, spawnPipe)
 import           XMonad.Util.Scratchpad
 
 colours = greenDarkColours
@@ -65,9 +70,10 @@ myNormalBorderColour  = cBrightBlack
 myFocusedBorderColour = cGreen
 myBorderWidth         = 2
 myFocusFollowsMouse   = True
+myFont size           = "xft:DejaVu Sans Mono:size=" <> show size <> ":antialias=true:autohint=true"
 
 myPromptConfig = def
-  { font = "xft:DejaVu Sans Mono:size=10:antialias=true:autohint=true"
+  { font = myFont 10
   , bgColor = cBlack
   , fgColor = cWhite
   , bgHLight = cGreen
@@ -83,6 +89,17 @@ myPromptConfig = def
                 <> vimLikeXPKeymap' (setBorderColor myNormalBorderColour) id id isSpace
                 <> emacsLikeXPKeymap
                 <> defaultXPKeymap
+  }
+
+myTabConfig = def
+  { activeColor = cBrightBlack
+  , inactiveColor = cBlack
+  , urgentColor = cRed
+  , activeBorderWidth = 0
+  , inactiveBorderWidth = 0
+  , activeTextColor = cBrightWhite
+  , inactiveTextColor = cWhite
+  , fontName = myFont 10
   }
 
 myWorkspaces = fmap show [1..9 :: Int]
@@ -166,6 +183,16 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   -- Spawn scratchpad.
   , ((modm, xK_s), scratchpadSpawnActionCustom $ myTerminalNamed "scratchpad")
 
+  ---- Sublayouts
+  , ((modm .|. controlMask, xK_h), sendMessage $ pullGroup L)
+  , ((modm .|. controlMask, xK_l), sendMessage $ pullGroup R)
+  , ((modm .|. controlMask, xK_k), sendMessage $ pullGroup U)
+  , ((modm .|. controlMask, xK_j), sendMessage $ pullGroup D)
+  , ((modm .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
+  , ((modm .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
+  , ((modm .|. controlMask, xK_period), onGroup W.focusUp')
+  , ((modm .|. controlMask, xK_comma), onGroup W.focusDown')
+
   ---- Prompt
   -- Shell prompt
   , ((modm, xK_space), shellPrompt myPromptConfig)
@@ -230,6 +257,8 @@ myMouseBindings XConfig {XMonad.modMask = modm} = Map.fromList
   ]
 
 myLayoutHook =
+  windowNavigation $
+  addTabs shrinkText myTabConfig . subLayout [] Simplest $
   spacingRaw True (Border 2 2 2 2) True (Border 2 2 2 2) True $
   avoidStruts $
   tiled ||| Mirror tiled ||| noBorders Full ||| simplestFloat
