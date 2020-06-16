@@ -75,3 +75,22 @@ greenDarkColours = Colours
   , brightCyan   = "#4eb6a9"
   , brightWhite  = "#a5a5a5"
   }
+
+base16TomorrowNightColours = Colours
+  { black         = "#1d1f21"
+  , red           = "#cc6666"
+  , green         = "#b5bd68"
+  , yellow        = "#f0c674"
+  , blue          = "#81a2be"
+  , purple        = "#b294bb"
+  , cyan          = "#8abeb7"
+  , white         = "#c5c8c6"
+  , brightRed     = "#cc6666"
+  , brightBlack   = "#969896"
+  , brightGreen   = "#b5bd68"
+  , brightYellow  = "#f0c674"
+  , brightBlue    = "#81a2be"
+  , brightPurple  = "#b294bb"
+  , brightCyan    = "#8abeb7"
+  , brightWhite   = "#ffffff"
+  }

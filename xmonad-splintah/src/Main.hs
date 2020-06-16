@@ -43,7 +43,7 @@ import qualified XMonad.StackSet                as W
 import           XMonad.Util.Run                (safeSpawn, spawnPipe)
 import           XMonad.Util.Scratchpad
 
-colours = greenDarkColours
+colours = base16TomorrowNightColours
 
 cBlack        = black colours
 cRed          = red colours
@@ -66,8 +66,8 @@ myTerminal            = "urxvt -e tmux"
 myTerminalNamed n     = "urxvt -name '" <> n <> "' -e tmux"
 myFileBrowser         = "ranger"
 myModMask             = mod4Mask -- Super key
-myNormalBorderColour  = cBrightBlack
-myFocusedBorderColour = cGreen
+myNormalBorderColour  = cBlack
+myFocusedBorderColour = cBlue
 myBorderWidth         = 2
 myFocusFollowsMouse   = True
 myFont size           = "xft:DejaVu Sans Mono:size=" <> show size <> ":antialias=true:autohint=true"
@@ -76,8 +76,8 @@ myPromptConfig = def
   { font = myFont 10
   , bgColor = cBlack
   , fgColor = cWhite
-  , bgHLight = cGreen
-  , fgHLight = cBrightBlack
+  , bgHLight = cBlue
+  , fgHLight = cBlack
   , borderColor = myFocusedBorderColour
   , alwaysHighlight = True
   , promptBorderWidth = myBorderWidth
@@ -92,13 +92,14 @@ myPromptConfig = def
   }
 
 myTabConfig = def
-  { activeColor = cBrightBlack
+  { activeColor = cBlack
   , inactiveColor = cBlack
   , urgentColor = cRed
   , activeBorderWidth = 0
   , inactiveBorderWidth = 0
-  , activeTextColor = cBrightWhite
+  , activeTextColor = cBlue
   , inactiveTextColor = cWhite
+  , urgentTextColor = cBlack
   , fontName = myFont 10
   }
 
@@ -301,7 +302,7 @@ xmobarLogHook xmobarProc = dynamicLogWithPP xmobarPP
 
 polybarLogHook = dynamicLogWithPP (Polybar.defPolybarPP "/tmp/.xmonad-log")
   { ppTitle = Polybar.foreground cBrightWhite . Polybar.font 1 . pad . shorten 50
-  , ppCurrent = Polybar.underline cGreen . Polybar.color cBlack cGreen . pad
+  , ppCurrent = Polybar.underline cBlue . Polybar.color cBlack cBlue . pad
   , ppHidden = Polybar.foreground cWhite . pad
   , ppVisible = Polybar.foreground cWhite . pad
   , ppUrgent = Polybar.underline cRed . Polybar.foreground cWhite . pad
