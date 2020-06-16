@@ -20,6 +20,8 @@ import           XMonad.Actions.CycleWS         (nextWS, prevWS)
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.SetWMName
+import           XMonad.Layout.BoringWindows    (boringWindows, focusDown,
+                                                 focusUp)
 import           XMonad.Layout.Fullscreen
 import           XMonad.Layout.NoBorders
 import           XMonad.Layout.Simplest         (Simplest (..))
@@ -152,9 +154,9 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   -- Resize viewed windows to correct size
   , ((modm, xK_n), refresh)
   -- Focus next window
-  , ((modm, xK_j), windows W.focusDown >> mouseFollowsFocus)
+  , ((modm, xK_j), focusDown >> mouseFollowsFocus)
   -- Focus previous window
-  , ((modm, xK_k), windows W.focusUp >> mouseFollowsFocus)
+  , ((modm, xK_k), focusUp >> mouseFollowsFocus)
   -- Move mouse pointer to centre of focused window
   , ((modm, xK_i), mouseFollowsFocus)
   -- Focus master
@@ -191,8 +193,8 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   , ((modm .|. controlMask, xK_j), sendMessage $ pullGroup D)
   , ((modm .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
   , ((modm .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
-  , ((modm .|. controlMask, xK_period), onGroup W.focusUp')
-  , ((modm .|. controlMask, xK_comma), onGroup W.focusDown')
+  , ((modm, xK_Tab), onGroup W.focusDown')
+  , ((modm .|. shiftMask, xK_Tab), onGroup W.focusUp')
 
   ---- Prompt
   -- Shell prompt
@@ -259,6 +261,7 @@ myMouseBindings XConfig {XMonad.modMask = modm} = Map.fromList
 
 myLayoutHook =
   windowNavigation $
+  boringWindows $
   addTabs shrinkText myTabConfig . subLayout [] Simplest $
   spacingRaw True (Border 2 2 2 2) True (Border 2 2 2 2) True $
   avoidStruts $
