@@ -4,7 +4,7 @@ module Scripts.MpvClip
 
 import Scripts.Clipboard
 import XMonad
-import XMonad.Util.Run   (runProcessWithInput, safeSpawn)
+import XMonad.Util.Run   (safeSpawn)
 
 mpvClip :: X ()
 mpvClip = liftIO mpvClip'
