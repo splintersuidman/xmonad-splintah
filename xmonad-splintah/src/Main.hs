@@ -12,6 +12,7 @@ import           Graphics.X11.ExtraTypes.XF86
 import           Mpris
 import qualified Polybar
 import           Scripts.MpvClip                (mpvClip)
+import           Scripts.Screenshot
 import           Scripts.SwitchKeyboard         (switchKeyboard)
 import           System.IO
 import           XMonad
@@ -137,6 +138,8 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   , ((modm, xK_f), spawn $ myTerminalNamed "ranger" <> " -c " <> myFileBrowser)
   -- Run mpv with clipboard contents
   , ((modm, xK_v), mpvClip)
+  -- Screenshot
+  , ((0, xK_Print), screenshotPrompt myPromptConfig)
 
   -- Switch keyboard layout.
   , ((modm, xK_slash), switchKeyboard)
