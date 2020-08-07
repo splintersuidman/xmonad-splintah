@@ -132,8 +132,6 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   ---- Applications
   -- Launch terminal
   [ ((modm, xK_Return), spawn myTerminal)
-  -- Run menu script.
-  , ((modm, xK_a), spawn "~/.local/bin/menu.scm")
   -- Run file browser
   , ((modm, xK_f), spawn $ myTerminalNamed "ranger" <> " -c " <> myFileBrowser)
   -- Run mpv with clipboard contents
