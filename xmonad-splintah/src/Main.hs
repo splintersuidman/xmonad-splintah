@@ -9,7 +9,6 @@ import           Data.Char                      (isSpace)
 import qualified Data.Map                       as Map
 import           Foreign.C.Types                (CInt (..))
 import           Graphics.X11.ExtraTypes.XF86
-import           Mpris
 import qualified Polybar
 import           Scripts.MpvClip                (mpvClip)
 import           Scripts.Screenshot
@@ -221,14 +220,11 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
 
   ---- Audio and music
   -- Play/pause
-  , ((0, xF86XK_Launch1), mprisToggle)
-  , ((0, xF86XK_AudioPlay), mprisToggle)
-  , ((0, xK_Pause), mprisToggle)
-  , ((modm, xF86XK_Launch1), mprisPrompt myPromptConfig)
-  , ((modm, xF86XK_AudioPlay), mprisPrompt myPromptConfig)
-  , ((modm, xK_Pause), mprisPrompt myPromptConfig)
+  , ((0, xF86XK_Launch1), spawn "mpc toggle")
+  , ((0, xF86XK_AudioPlay), spawn "mpc toggle")
+  , ((0, xK_Pause), spawn "mpc toggle")
   -- Pause
-  , ((0, xF86XK_AudioStop), mprisStopAll)
+  , ((0, xF86XK_AudioStop), spawn "mpc stop")
   -- Next track
   , ((0, xF86XK_AudioNext), spawn "mpc next")
   -- Previous track
@@ -318,7 +314,7 @@ polybarLogHook = dynamicLogWithPP (Polybar.defPolybarPP "/tmp/.xmonad-log")
 
 myLogHook = polybarLogHook
 
-myStartupHook = docksStartupHook <+> setWMName "LG3D" <+> mprisCreateProcess
+myStartupHook = docksStartupHook <+> setWMName "LG3D"
 
 main = do
   safeSpawn "mkfifo" ["/tmp/.xmonad-log"]
