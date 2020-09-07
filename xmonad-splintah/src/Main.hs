@@ -42,8 +42,12 @@ import           XMonad.Prompt.Window           (WindowPrompt (Bring, Goto),
                                                  wsWindows)
 import           XMonad.Prompt.Workspace        (workspacePrompt)
 import qualified XMonad.StackSet                as W
+import           XMonad.Util.NamedScratchpad    (NamedScratchpad (NS),
+                                                 namedScratchpadAction,
+                                                 namedScratchpadManageHook)
+import qualified XMonad.Util.NamedScratchpad    as NS
 import           XMonad.Util.Run                (safeSpawn, spawnPipe)
-import           XMonad.Util.Scratchpad
+import           XMonad.Util.Scratchpad         (scratchpadFilterOutWorkspace)
 
 colours = base16TomorrowNightColours
 
@@ -65,7 +69,7 @@ cBrightCyan   = brightCyan colours
 cBrightWhite  = brightWhite colours
 
 myTerminal            = "urxvt -e tmux"
-myTerminalNamed n     = "urxvt -name '" <> n <> "' -e tmux"
+myTerminalNamed n     = "urxvt -title " <> n <> " -name " <> n <> " -e tmux"
 myFileBrowser         = "ranger"
 myModMask             = mod4Mask -- Super key
 myNormalBorderColour  = cBlack
@@ -106,6 +110,21 @@ myTabConfig = def
   }
 
 myWorkspaces = fmap show [1..9 :: Int]
+
+myScratchpads =
+  [ NS
+    { NS.name = "scratchpad"
+    , NS.cmd = myTerminalNamed "scratchpad"
+    , NS.query = title =? "scratchpad"
+    , NS.hook = NS.customFloating $ W.RationalRect (1/4) (1/4) (1/2) (1/2)
+    }
+  , NS
+    { NS.name = "agenda"
+    , NS.cmd = "emacs --name agenda --eval '(progn (org-agenda nil \"n\") (delete-other-windows))'"
+    , NS.query = title =? "agenda"
+    , NS.hook = NS.customFloating $ W.RationalRect (1/16) (1/16) (7/8) (7/8)
+    }
+  ]
 
 -- | Move the mouse pointer to the centre of the window.
 mouseToWindowCentre :: Display -> Window -> X ()
@@ -183,8 +202,10 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   , ((modm, xK_period), sendMessage (IncMasterN (-1)))
   -- Restart xmonad
   , ((modm .|. shiftMask, xK_q), spawn "notify-send 'Recompiling xmonad...'; xmonad --recompile; xmonad --restart")
-  -- Spawn scratchpad.
-  , ((modm, xK_s), scratchpadSpawnActionCustom $ myTerminalNamed "scratchpad")
+  -- Spawn terminal scratchpad.
+  , ((modm, xK_s), namedScratchpadAction myScratchpads "scratchpad")
+  -- Spawn agenda scratchpad.
+  , ((modm, xK_a), namedScratchpadAction myScratchpads "agenda")
 
   ---- Sublayouts
   , ((modm .|. controlMask, xK_h), sendMessage $ pullGroup L)
@@ -269,7 +290,8 @@ myLayoutHook =
     ratio = 1/2
     delta = 3/100
 
-myManageHook = scratchpadManageHook (W.RationalRect 0.25 0.25 0.5 0.5) <+> manageDocks
+myManageHook =
+  namedScratchpadManageHook myScratchpads <> manageDocks
 
 myHandleEventHook = docksEventHook
 
