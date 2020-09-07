@@ -70,6 +70,7 @@ cBrightWhite  = brightWhite colours
 
 myTerminal            = "urxvt -e tmux"
 myTerminalNamed n     = "urxvt -title " <> n <> " -name " <> n <> " -e tmux"
+myEditor              = "emacsclient -c"
 myFileBrowser         = "ranger"
 myModMask             = mod4Mask -- Super key
 myNormalBorderColour  = cBlack
@@ -150,6 +151,8 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   ---- Applications
   -- Launch terminal
   [ ((modm, xK_Return), spawn myTerminal)
+  -- Run editor
+  , ((modm, xK_e), spawn myEditor)
   -- Run file browser
   , ((modm, xK_f), spawn $ myTerminalNamed "ranger" <> " -c " <> myFileBrowser)
   -- Run mpv with clipboard contents
