@@ -255,13 +255,13 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   -- Previous track
   , ((0, xF86XK_AudioPrev), spawn "mpc prev")
   -- Lower volume
-  , ((0, xF86XK_AudioLowerVolume), spawn "amixer sset Master 5%-")
-  , ((modm, xK_Page_Down), spawn "amixer sset Master 5%-")
+  , ((0, xF86XK_AudioLowerVolume), spawn "amixer set Master 5%-")
+  , ((modm, xK_Page_Down), spawn "amixer set Master 5%-")
   -- Raise volume
-  , ((0, xF86XK_AudioRaiseVolume), spawn "amixer sset Master 5%+")
-  , ((modm, xK_Page_Up), spawn "amixer sset Master 5%+")
+  , ((0, xF86XK_AudioRaiseVolume), spawn "amixer set Master 5%+")
+  , ((modm, xK_Page_Up), spawn "amixer set Master 5%+")
   -- Toggle audio
-  , ((0, xF86XK_AudioMute), spawn "amixer sset Master toggle")
+  , ((0, xF86XK_AudioMute), spawn "amixer set Master toggle")
   -- Toggle microphone
   , ((0, xF86XK_AudioMicMute), micLed)
   ]
