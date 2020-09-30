@@ -264,6 +264,12 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   , ((0, xF86XK_AudioMute), spawn "amixer set Master toggle")
   -- Toggle microphone
   , ((0, xF86XK_AudioMicMute), micLed)
+
+  ---- Brightness
+  -- Lower brightness
+  , ((0, xF86XK_MonBrightnessUp), spawn "brightnessctl --device=amdgpu_bl0 set +5")
+  -- Raise brightness
+  , ((0, xF86XK_MonBrightnessDown), spawn "brightnessctl --device=amdgpu_bl0 set 5-")
   ]
   <>
   [ ((modm .|. m, k), windows $ f i)
