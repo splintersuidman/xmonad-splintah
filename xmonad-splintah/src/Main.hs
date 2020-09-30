@@ -259,6 +259,10 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   -- Raise volume
   , ((0, xF86XK_AudioRaiseVolume), spawn "amixer sset Master 5%+")
   , ((modm, xK_Page_Up), spawn "amixer sset Master 5%+")
+  -- Toggle audio
+  , ((0, xF86XK_AudioMute), spawn "amixer sset Master toggle")
+  -- Toggle microphone
+  , ((0, xF86XK_AudioMicMute), spawn "amixer sset Capture toggle")
   ]
   <>
   [ ((modm .|. m, k), windows $ f i)
