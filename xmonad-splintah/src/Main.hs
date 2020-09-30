@@ -10,6 +10,7 @@ import qualified Data.Map                       as Map
 import           Foreign.C.Types                (CInt (..))
 import           Graphics.X11.ExtraTypes.XF86
 import qualified Polybar
+import           Scripts.MicLed                 (micLed)
 import           Scripts.MpvClip                (mpvClip)
 import           Scripts.Screenshot
 import           Scripts.SwitchKeyboard         (switchKeyboard)
@@ -262,7 +263,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   -- Toggle audio
   , ((0, xF86XK_AudioMute), spawn "amixer sset Master toggle")
   -- Toggle microphone
-  , ((0, xF86XK_AudioMicMute), spawn "amixer sset Capture toggle")
+  , ((0, xF86XK_AudioMicMute), micLed)
   ]
   <>
   [ ((modm .|. m, k), windows $ f i)
