@@ -78,10 +78,10 @@ myNormalBorderColour  = cBlack
 myFocusedBorderColour = cBlue
 myBorderWidth         = 2
 myFocusFollowsMouse   = True
-myFont size           = "xft:DejaVu Sans Mono:size=" <> show size <> ":antialias=true:autohint=true"
+myFont size           = "xft:Iosevka Custom:size=" <> show size <> ":antialias=true:autohint=true"
 
 myPromptConfig = def
-  { font = myFont 10
+  { font = myFont 11
   , bgColor = cBlack
   , fgColor = cWhite
   , bgHLight = cGreen
@@ -108,7 +108,7 @@ myTabConfig = def
   , activeTextColor = cBlue
   , inactiveTextColor = cWhite
   , urgentTextColor = cBlack
-  , fontName = myFont 10
+  , fontName = myFont 11
   }
 
 myWorkspaces = fmap show [1..9 :: Int]
