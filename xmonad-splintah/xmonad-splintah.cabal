@@ -18,7 +18,7 @@ executable xmonad-splintah
   other-modules:       Colours
                      , Polybar
   -- other-extensions:
-  build-depends:       base ^>=4.12.0.0
+  build-depends:       base
                      , xmonad ^>=0.15
                      , xmonad-contrib ^>=0.16
                      , X11 ^>=1.9
