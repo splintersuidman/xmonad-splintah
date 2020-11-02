@@ -321,21 +321,6 @@ xmobarLogHook xmobarProc = dynamicLogWithPP xmobarPP
   , ppWsSep   = ""
   }
 
----- Gruvbox ----
--- polybarLogHook = dynamicLogWithPP (Polybar.defPolybarPP "/tmp/.xmonad-log")
---   { ppTitle = Polybar.color cBrightWhite cBlue . pad . shorten 50
---   , ppCurrent = Polybar.underline cBrightBlue . Polybar.color cBrightWhite cBlue . pad
---   , ppHidden = maybe "" (Polybar.color cWhite cBlack . pad) . filterOutNSP
---   , ppVisible = maybe "" (Polybar.color cWhite cBlack . pad) . filterOutNSP
---   , ppUrgent = Polybar.underline cRed . Polybar.color cWhite cBlack . pad
---   , ppLayout = const " "
---   , ppSep = ""
---   , ppWsSep = ""
---   }
---   where
---     filterOutNSP "NSP" = Nothing
---     filterOutNSP s     = Just s
-
 polybarLogHook = dynamicLogWithPP (Polybar.defPolybarPP "/tmp/.xmonad-log")
   { ppTitle = Polybar.foreground cBrightWhite . Polybar.font 1 . pad . shorten 50
   , ppCurrent = Polybar.underline cBlue . Polybar.color cBlack cBlue . pad
