@@ -71,7 +71,7 @@ cBrightWhite  = brightWhite colours
 
 myTerminal            = "urxvt -e tmux"
 myTerminalNamed n     = "urxvt -title " <> n <> " -name " <> n <> " -e tmux"
-myEditor              = "emacsclient -c"
+myEditor              = "emacsclient --create-frame"
 myFileBrowser         = "ranger"
 myModMask             = mod4Mask -- Super key
 myNormalBorderColour  = cBlack
@@ -122,7 +122,7 @@ myScratchpads =
     }
   , NS
     { NS.name = "agenda"
-    , NS.cmd = "emacs --name agenda --eval '(progn (org-agenda nil \"n\") (delete-other-windows))'"
+    , NS.cmd = "emacsclient --create-frame --frame-parameters '((name . \"agenda\"))' --eval '(progn (org-agenda nil \"n\") (delete-other-windows))'"
     , NS.query = title =? "agenda"
     , NS.hook = NS.customFloating $ W.RationalRect (1/16) (1/16) (7/8) (7/8)
     }
