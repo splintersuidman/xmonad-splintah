@@ -205,7 +205,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   -- Decrement the number of windows in the master area
   , ((modm, xK_period), sendMessage (IncMasterN (-1)))
   -- Restart xmonad
-  , ((modm .|. shiftMask, xK_q), spawn "notify-send 'Recompiling xmonad...'; xmonad --recompile; xmonad --restart")
+  , ((modm .|. shiftMask, xK_q), recompile True >> restart "xmonad" True)
   -- Spawn terminal scratchpad.
   , ((modm, xK_s), namedScratchpadAction myScratchpads "scratchpad")
   -- Spawn agenda scratchpad.
