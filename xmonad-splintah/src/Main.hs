@@ -329,7 +329,7 @@ xmobarLogHook xmobarProc = dynamicLogWithPP xmobarPP
   }
 
 polybarLogHook = dynamicLogWithPP (Polybar.defPolybarPP "/tmp/.xmonad-log")
-  { ppTitle = Polybar.foreground cBrightWhite . Polybar.font 1 . pad . shorten 50
+  { ppTitle = Polybar.foreground cBrightWhite . shorten 50
   , ppCurrent = Polybar.underline cBlue . Polybar.color cBlack cBlue . pad
   , ppHidden = Polybar.foreground cWhite . pad
   , ppVisible = Polybar.foreground cWhite . pad
