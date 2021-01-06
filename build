@@ -1,6 +1,5 @@
 #!/bin/sh
 
 dist=$1
-nix-build --out-link result xmonad-splintah
-cp result/bin/xmonad-splintah "$dist"
+cp $(nix-build --no-out-link)/bin/xmonad-splintah "$dist"
 chmod a+w "$dist"
