@@ -30,12 +30,26 @@
         compiler = "ghc8102";
         pkgs = nixpkgs.legacyPackages.${system};
       in {
-        packages.xmonad-splintah =
-          pkgs.pkgs.haskell.packages.${compiler}.callPackage
+        packages.xmonad-splintah = pkgs.haskell.packages.${compiler}.callPackage
           ./xmonad-splintah/xmonad-splintah.nix { };
 
         devShell = self.packages.${system}.xmonad-splintah.env;
 
         defaultPackage = self.packages.${system}.xmonad-splintah;
+
+        # Build script for XMonad.
+        apps.build = {
+          type = "app";
+          program = let
+            build = pkgs.writeScriptBin "build" ''
+              #!${pkgs.stdenv.shell}
+              dist=$1
+              cp ${self.defaultPackage.${system}}/bin/xmonad-splintah "$dist"
+              chmod a+w "$dist"
+            '';
+          in "${build}/bin/build";
+        };
+
+        defaultApp = self.apps.${system}.build;
       });
 }
