@@ -29,7 +29,7 @@
       let
         compiler = "ghc8102";
         pkgs = nixpkgs.legacyPackages.${system};
-      in rec {
+      in {
         packages.xmonad-splintah =
           pkgs.pkgs.haskell.packages.${compiler}.callPackage
           ./xmonad-splintah/xmonad-splintah.nix { };
