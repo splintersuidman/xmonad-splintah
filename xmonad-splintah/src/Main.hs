@@ -19,6 +19,7 @@ import           XMonad
 import           XMonad.Actions.CopyWindow
 import           XMonad.Actions.CycleWS         (nextWS, prevWS)
 import           XMonad.Hooks.DynamicLog
+import           XMonad.Hooks.EwmhDesktops      (ewmh)
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.SetWMName
 import           XMonad.Layout.BoringWindows    (boringWindows, focusDown,
@@ -329,12 +330,12 @@ xmobarLogHook xmobarProc = dynamicLogWithPP xmobarPP
   }
 
 polybarLogHook = dynamicLogWithPP (Polybar.defPolybarPP "/tmp/.xmonad-log")
-  { ppTitle = Polybar.foreground cBrightWhite . shorten 50
+  { ppTitle = const ""
   , ppCurrent = Polybar.underline cBlue . Polybar.color cBlack cBlue . pad
   , ppHidden = Polybar.foreground cWhite . pad
   , ppVisible = Polybar.foreground cWhite . pad
   , ppUrgent = Polybar.underline cRed . Polybar.foreground cWhite . pad
-  , ppLayout = const " "
+  , ppLayout = const ""
   , ppSep = ""
   , ppWsSep = ""
   , ppSort = (scratchpadFilterOutWorkspace .) <$> ppSort def
@@ -347,7 +348,7 @@ myStartupHook = docksStartupHook <+> setWMName "LG3D"
 main = do
   safeSpawn "mkfifo" ["/tmp/.xmonad-log"]
 
-  xmonad . fullscreenSupport $ def
+  xmonad . ewmh . fullscreenSupport $ def
     { modMask            = myModMask
     , normalBorderColor  = myNormalBorderColour
     , focusedBorderColor = myFocusedBorderColour
