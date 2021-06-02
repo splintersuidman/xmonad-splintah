@@ -27,13 +27,13 @@
   outputs = { self, nixpkgs, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        compiler = "ghc8102";
         pkgs = nixpkgs.legacyPackages.${system};
+        haskellPackages = pkgs.haskellPackages;
       in {
-        packages.xmonad-splintah = pkgs.haskell.packages.${compiler}.callPackage
-          ./xmonad-splintah/xmonad-splintah.nix { };
 
         devShell = self.packages.${system}.xmonad-splintah.env;
+        packages.xmonad-splintah =
+          haskellPackages.callPackage ./xmonad-splintah/xmonad-splintah.nix { };
 
         defaultPackage = self.packages.${system}.xmonad-splintah;
 
