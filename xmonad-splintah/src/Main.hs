@@ -115,6 +115,7 @@ myPromptConfig = withTheme $ \Base16 {..} ->
 withMyPromptConfig :: (XPConfig -> X a) -> X a
 withMyPromptConfig f = f =<< myPromptConfig
 
+myTabConfig :: Theme
 myTabConfig = def
   { activeColor = cBlack
   , inactiveColor = cBlack
@@ -127,8 +128,10 @@ myTabConfig = def
   , fontName = myFont 11
   }
 
+myWorkspaces :: [String]
 myWorkspaces = fmap show [1..9 :: Int]
 
+myScratchpads :: [NamedScratchpad]
 myScratchpads =
   [ NS
     { NS.name = "scratchpad"
@@ -327,6 +330,7 @@ myLayoutHook =
     ratio = 1/2
     delta = 3/100
 
+myManageHook :: ManageHook
 myManageHook =
   namedScratchpadManageHook myScratchpads <> manageDocks
 
@@ -360,10 +364,13 @@ polybarLogHook = -- withTheme $ \Base16 {..} ->
   where
     Base16 {..} = myTheme
 
+myLogHook :: X ()
 myLogHook = polybarLogHook
 
-myStartupHook = docksStartupHook <+> setWMName "LG3D"
+myStartupHook :: X ()
+myStartupHook = docksStartupHook <> setWMName "LG3D"
 
+main :: IO ()
 main = do
   safeSpawn "mkfifo" ["/tmp/.xmonad-log"]
 
