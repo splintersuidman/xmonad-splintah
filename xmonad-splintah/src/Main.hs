@@ -296,6 +296,10 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   , ((0, xF86XK_MonBrightnessUp), spawn "brightnessctl --device=amdgpu_bl0 set +5")
   -- Raise brightness
   , ((0, xF86XK_MonBrightnessDown), spawn "brightnessctl --device=amdgpu_bl0 set 5-")
+
+  ---- Displays
+  -- Autorandr
+  , ((0, xF86XK_Display), spawn "autorandr --change")
   ]
   <>
   [ ((modm .|. m, k), windows $ f i)
