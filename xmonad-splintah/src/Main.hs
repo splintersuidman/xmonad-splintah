@@ -1,12 +1,13 @@
-{-# LANGUAGE LambdaCase     #-}
-{-# LANGUAGE NamedFieldPuns #-}
-{-# LANGUAGE TupleSections  #-}
+{-# LANGUAGE LambdaCase      #-}
+{-# LANGUAGE NamedFieldPuns  #-}
+{-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE TupleSections   #-}
 
 module Main where
 
 import           Colours
 import           Data.Char                      (isSpace)
-import qualified Data.Map                       as Map
+import qualified Data.Map.Strict                as Map
 import           Foreign.C.Types                (CInt (..))
 import           Graphics.X11.ExtraTypes.XF86
 import qualified Polybar
@@ -70,6 +71,15 @@ cBrightPurple = brightPurple colours
 cBrightCyan   = brightCyan colours
 cBrightWhite  = brightWhite colours
 
+myTheme :: Base16
+myTheme = Colours.modusVivendi
+
+withTheme :: (Base16 -> X a) -> X a
+-- TODO: get this working with X resources. 'resourceManagerString' does not
+-- retrieve the latest resources.
+-- withTheme = withBase16Theme myTheme
+withTheme f = f myTheme
+
 myTerminal            = "urxvt -e tmux"
 myTerminalNamed n     = "urxvt -title " <> n <> " -name " <> n <> " -e tmux"
 myEditor              = "emacsclient --create-frame"
@@ -81,24 +91,29 @@ myBorderWidth         = 2
 myFocusFollowsMouse   = True
 myFont size           = "xft:Iosevka Custom:size=" <> show size <> ":antialias=true:autohint=true"
 
-myPromptConfig = def
-  { font = myFont 11
-  , bgColor = cBlack
-  , fgColor = cWhite
-  , bgHLight = cGreen
-  , fgHLight = cBlack
-  , borderColor = myFocusedBorderColour
-  , alwaysHighlight = True
-  , promptBorderWidth = myBorderWidth
-  , position = CenteredAt (1 / 8) (3 / 4)
-  , height = 25
-  , searchPredicate = fuzzyMatch
-  , sorter = fuzzySort
-  , promptKeymap = Map.fromList [((myModMask, xK_space), Prompt.quit)]
-                <> vimLikeXPKeymap' (setBorderColor myNormalBorderColour) id id isSpace
-                <> emacsLikeXPKeymap
-                <> defaultXPKeymap
-  }
+myPromptConfig :: X XPConfig
+myPromptConfig = withTheme $ \Base16 {..} ->
+  pure $ def
+    { font = myFont 11
+    , bgColor = base00
+    , fgColor = base05
+    , bgHLight = base0B
+    , fgHLight = base00
+    , borderColor = base0D
+    , alwaysHighlight = True
+    , promptBorderWidth = myBorderWidth
+    , position = CenteredAt (1 / 8) (3 / 4)
+    , height = 30
+    , searchPredicate = fuzzyMatch
+    , sorter = fuzzySort
+    , promptKeymap = Map.fromList [((myModMask, xK_space), Prompt.quit)]
+                  <> vimLikeXPKeymap' (setBorderColor myNormalBorderColour) id id isSpace
+                  <> emacsLikeXPKeymap
+                  <> defaultXPKeymap
+    }
+
+withMyPromptConfig :: (XPConfig -> X a) -> X a
+withMyPromptConfig f = f =<< myPromptConfig
 
 myTabConfig = def
   { activeColor = cBlack
@@ -160,7 +175,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   -- Run mpv with clipboard contents
   , ((modm, xK_v), mpvClip)
   -- Screenshot
-  , ((0, xK_Print), screenshotPrompt myPromptConfig)
+  , ((0, xK_Print), withMyPromptConfig screenshotPrompt)
 
   -- Switch keyboard layout.
   , ((modm, xK_slash), switchKeyboard)
@@ -224,25 +239,25 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
 
   ---- Prompt
   -- Shell prompt
-  , ((modm, xK_space), shellPrompt myPromptConfig)
+  , ((modm, xK_space), withMyPromptConfig shellPrompt)
   -- Go to workspace
-  , ((modm, xK_m), workspacePrompt myPromptConfig (windows . W.greedyView))
+  , ((modm, xK_m), withMyPromptConfig $ \xpconf -> workspacePrompt xpconf (windows . W.greedyView))
   -- Move window to workspace
-  , ((modm .|. shiftMask, xK_m), workspacePrompt myPromptConfig (windows . W.shift))
+  , ((modm .|. shiftMask, xK_m), withMyPromptConfig $ \xpconf -> workspacePrompt xpconf (windows . W.shift))
   -- Go to window on workspace
-  , ((modm, xK_w), windowPrompt myPromptConfig Goto wsWindows)
+  , ((modm, xK_w), withMyPromptConfig $ \xpconf -> windowPrompt xpconf Goto wsWindows)
   -- Go to window
-  , ((modm .|. controlMask, xK_w), windowPrompt myPromptConfig Goto allWindows)
+  , ((modm .|. controlMask, xK_w), withMyPromptConfig $ \xpconf -> windowPrompt xpconf Goto allWindows)
   -- Bring window
-  , ((modm .|. shiftMask, xK_w), windowPrompt myPromptConfig Bring allWindows)
+  , ((modm .|. shiftMask, xK_w), withMyPromptConfig $ \xpconf -> windowPrompt xpconf Bring allWindows)
   -- Pass
-  , ((modm , xK_p), passPrompt myPromptConfig)
+  , ((modm , xK_p), withMyPromptConfig passPrompt)
   -- Pass generate
-  , ((modm .|. shiftMask, xK_p), passGeneratePrompt myPromptConfig)
+  , ((modm .|. shiftMask, xK_p), withMyPromptConfig passGeneratePrompt)
   -- Pass edit
-  , ((modm .|. controlMask, xK_p), passEditPrompt myPromptConfig)
+  , ((modm .|. controlMask, xK_p), withMyPromptConfig passEditPrompt)
   -- Pass remove
-  , ((modm .|. controlMask .|. shiftMask, xK_p), passRemovePrompt myPromptConfig)
+  , ((modm .|. controlMask .|. shiftMask, xK_p), withMyPromptConfig passRemovePrompt)
 
   ---- Audio and music
   -- Play/pause
@@ -329,17 +344,21 @@ xmobarLogHook xmobarProc = dynamicLogWithPP xmobarPP
   , ppWsSep   = ""
   }
 
-polybarLogHook = dynamicLogWithPP (Polybar.defPolybarPP "/tmp/.xmonad-log")
-  { ppTitle = const ""
-  , ppCurrent = Polybar.underline cBlue . Polybar.color cBlack cBlue . pad
-  , ppHidden = Polybar.foreground cWhite . pad
-  , ppVisible = Polybar.foreground cWhite . pad
-  , ppUrgent = Polybar.underline cRed . Polybar.foreground cWhite . pad
-  , ppLayout = const ""
-  , ppSep = ""
-  , ppWsSep = ""
-  , ppSort = (scratchpadFilterOutWorkspace .) <$> ppSort def
-  }
+polybarLogHook :: X ()
+polybarLogHook = -- withTheme $ \Base16 {..} ->
+  dynamicLogWithPP (Polybar.defPolybarPP "/tmp/.xmonad-log")
+    { ppTitle = const ""
+    , ppCurrent = Polybar.underline base0D . Polybar.color base00 base0D . pad
+    , ppHidden = Polybar.foreground base05 . pad
+    , ppVisible = Polybar.foreground base05 . pad
+    , ppUrgent = Polybar.underline base08 . Polybar.foreground base05 . pad
+    , ppLayout = const ""
+    , ppSep = ""
+    , ppWsSep = ""
+    , ppSort = (scratchpadFilterOutWorkspace .) <$> ppSort def
+    }
+  where
+    Base16 {..} = myTheme
 
 myLogHook = polybarLogHook
 
