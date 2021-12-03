@@ -1,4 +1,4 @@
-{ mkDerivation, base, containers, process, stdenv, X11
+{ mkDerivation, base, containers, process, lib, X11
 , xmonad, xmonad-contrib
 }:
 mkDerivation {
@@ -10,5 +10,5 @@ mkDerivation {
   executableHaskellDepends = [
     base containers process X11 xmonad xmonad-contrib
   ];
-  license = stdenv.lib.licenses.agpl3;
+  license = lib.licenses.agpl3;
 }
