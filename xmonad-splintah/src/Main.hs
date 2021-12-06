@@ -264,19 +264,19 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
 
   ---- Audio and music
   -- Play/pause
-  , ((0, xF86XK_Launch1), spawn "mpc toggle")
-  , ((0, xF86XK_AudioPlay), spawn "mpc toggle")
-  , ((0, xK_Pause), spawn "mpc toggle")
-  , ((modm, xK_F7), spawn "mpc toggle")
+  , ((0, xF86XK_Launch1), spawn "playerctl play-pause")
+  , ((0, xF86XK_AudioPlay), spawn "playerctl play-pause")
+  , ((0, xK_Pause), spawn "playerctl play-pause")
+  , ((modm, xK_F7), spawn "playerctl play-pause")
   -- Pause
-  , ((0, xF86XK_AudioStop), spawn "mpc stop")
-  , ((modm, xK_F9), spawn "mpc stop")
+  , ((0, xF86XK_AudioStop), spawn "playerctl stop")
+  , ((modm, xK_F9), spawn "playerctl stop")
   -- Next track
-  , ((0, xF86XK_AudioNext), spawn "mpc next")
-  , ((modm, xK_F8), spawn "mpc next")
+  , ((0, xF86XK_AudioNext), spawn "playerctl next")
+  , ((modm, xK_F8), spawn "playerctl next")
   -- Previous track
-  , ((0, xF86XK_AudioPrev), spawn "mpc prev")
-  , ((modm, xK_F6), spawn "mpc prev")
+  , ((0, xF86XK_AudioPrev), spawn "playerctl previous")
+  , ((modm, xK_F6), spawn "playerctl previous")
   -- Lower volume
   , ((0, xF86XK_AudioLowerVolume), spawn "amixer set Master 5%-")
   , ((modm, xK_Page_Down), spawn "amixer set Master 5%-")
