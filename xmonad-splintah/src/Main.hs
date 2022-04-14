@@ -266,6 +266,7 @@ myKeys conf@XConfig {XMonad.modMask = modm} = Map.fromList $
   -- Play/pause
   , ((0, xF86XK_Launch1), spawn "playerctl play-pause")
   , ((0, xF86XK_AudioPlay), spawn "playerctl play-pause")
+  , ((0, xF86XK_AudioPause), spawn "playerctl play-pause")
   , ((0, xK_Pause), spawn "playerctl play-pause")
   , ((modm, xK_F7), spawn "playerctl play-pause")
   -- Pause
