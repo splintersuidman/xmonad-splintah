@@ -19,8 +19,8 @@ executable xmonad-splintah
                      , Polybar
   -- other-extensions:
   build-depends:       base
-                     , xmonad ^>=0.15
-                     , xmonad-contrib ^>=0.16
+                     , xmonad ^>=0.17
+                     , xmonad-contrib ^>=0.17
                      , X11 ^>=1.10
                      , containers ^>=0.6
                      , process ^>=1.6
